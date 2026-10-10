@@ -1,0 +1,339 @@
+
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>TireScout</title>
+
+<style>
+
+*{box-sizing:border-box}
+
+body{margin:0;background:#10141c;color:#f5f7fa;font-family:Arial,sans-serif}
+
+header{padding:24px 18px;background:#182230;border-bottom:3px solid #69d4a5}
+
+.logo{font-size:28px;font-weight:800}
+
+.logo span{color:#69d4a5}
+
+.tag{color:#b6c2d1;margin-top:5px}
+
+main{padding:16px;max-width:650px;margin:auto}
+
+h2{font-size:19px;margin-top:22px}
+
+.card{background:#1b2533;border:1px solid #303d4e;border-radius:14px;padding:16px;margin:12px 0}
+
+label{display:block;color:#bdc9d7;font-size:13px;margin:12px 0 6px}
+
+input,select,button{width:100%;padding:13px;border-radius:9px;font-size:16px}
+
+input,select{background:#101923;color:white;border:1px solid #465366}
+
+button{background:#69d4a5;color:#102019;border:0;font-weight:bold;margin-top:12px}
+
+.small{color:#aab7c7;font-size:12px;line-height:1.5}
+
+.price{font-size:25px;font-weight:bold;color:#69d4a5}
+
+.offer{border-top:1px solid #394556;padding:13px 0}
+
+.pill{display:inline-block;background:#304b42;color:#9bf0c8;padding:5px 8px;border-radius:20px;font-size:12px}
+
+nav{display:flex;position:sticky;bottom:0;background:#182230;padding:8px;gap:5px}
+
+nav button{margin:0;padding:12px 3px;font-size:12px;flex:1}
+
+section{display:none}
+
+section.active{display:block}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+ <div class="logo">Tire<span>Scout</span></div>
+
+ <div class="tag">Scout the best tire deals.</div>
+
+</header>
+
+<main>
+
+<section id="home" class="active">
+
+ <div class="card">
+
+  <span class="pill">SMART TIRE SHOPPING</span>
+
+  <h2>Find the right tires. Pay less.</h2>
+
+  Compare tire prices with installation, fees and shipping included whenever available.
+
+  <button onclick="show('search')">Find My Tires</button>
+
+ </div>
+
+ <h2>Your Vehicle</h2>
+
+ <div class="card">
+
+  <label>Year</label>
+
+  <select id="year">
+
+   <option>2023</option><option>2024</option><option>2022</option>
+
+   <option>2021</option><option>2020</option><option>2019</option>
+
+  </select>
+
+  <label>Make</label>
+
+  <select id="make">
+
+   <option>GMC</option><option>Chevrolet</option><option>Ford</option>
+
+   <option>Toyota</option><option>Honda</option><option>Subaru</option>
+
+  </select>
+
+  <label>Model</label>
+
+  <input id="model" value="Yukon XL">
+
+  <label>Tire size (example: 275/50R22)</label>
+
+  <input id="size" value="275/50R22">
+
+  <button onclick="saveVehicle()">Save Vehicle</button>
+
+  <p id="saved" class="small">Select your vehicle to get started.</p>
+
+ </div>
+
+</section>
+
+<section id="garage">
+
+ <h2>My Garage</h2>
+
+ <div class="card">
+
+  <p id="vehicle">No vehicle saved yet.</p>
+
+  <button onclick="show('home')">Edit Vehicle</button>
+
+  <button onclick="show('search')">Search Tires</button>
+
+ </div>
+
+</section>
+
+<section id="search">
+
+ <h2>Find Tire Deals</h2>
+
+ <div class="card">
+
+  <label>Tire size</label>
+
+  <input id="searchsize" value="275/50R22">
+
+  <label>Tire type</label>
+
+  <select id="type">
+
+   <option>All-season</option><option>All-terrain</option>
+
+   <option>Winter</option><option>Performance</option>
+
+  </select>
+
+  <label>Maximum budget per set</label>
+
+  <select id="budget">
+
+   <option value="2000">Any budget</option>
+
+   <option value="800">$800</option>
+
+   <option value="1200">$1,200</option>
+
+   <option value="1600">$1,600</option>
+
+  </select>
+
+  <button onclick="searchTires()">Compare Deals</button>
+
+ </div>
+
+ <p class="small">Ranked by estimated total cost for four tires, including listed installation, fees and shipping.</p>
+
+ <div id="results"></div>
+
+</section>
+
+<section id="account">
+
+ <h2>My Account</h2>
+
+ <div class="card">
+
+  <label>Name</label><input id="name" placeholder="Your name">
+
+  <label>Email</label><input id="email" type="email" placeholder="you@example.com">
+
+  <button onclick="saveAccount()">Save Profile</button>
+
+  <p id="accountstatus" class="small">Profile is stored on this device for this demo.</p>
+
+ </div>
+
+</section>
+
+</main>
+
+<nav>
+
+ <button onclick="show('home')">Home</button>
+
+ <button onclick="show('garage')">Garage</button>
+
+ <button onclick="show('search')">Tire Search</button>
+
+ <button onclick="show('account')">Account</button>
+
+</nav>
+
+<script>
+
+function show(id){
+
+ document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+
+ document.getElementById(id).classList.add('active');
+
+}
+
+function saveVehicle(){
+
+ const v=document.getElementById('year').value+' '+
+
+ document.getElementById('make').value+' '+
+
+ document.getElementById('model').value;
+
+ const size=document.getElementById('size').value;
+
+ localStorage.setItem('tsVehicle',v);
+
+ localStorage.setItem('tsSize',size);
+
+ document.getElementById('vehicle').textContent=v+' — '+size;
+
+ document.getElementById('saved').textContent='Vehicle saved!';
+
+ document.getElementById('searchsize').value=size;
+
+}
+
+const offers=[
+
+ {brand:'RoadReady Touring',shop:'Sample Tire Shop',tire:145,install:100,ship:0,fees:12},
+
+ {brand:'TrailMaster All Season',shop:'Demo Tire Center',tire:168,install:80,ship:0,fees:18},
+
+ {brand:'HighwayPro Comfort',shop:'Example Online Tires',tire:155,install:120,ship:40,fees:0},
+
+ {brand:'PremiumGrip Touring',shop:'Illustrative Auto',tire:205,install:90,ship:0,fees:15}
+
+];
+
+function searchTires(){
+
+ const max=Number(document.getElementById('budget').value);
+
+ const size=document.getElementById('searchsize').value;
+
+ const list=offers.map(o=>({...o,total:o.tire*4+o.install+o.ship+o.fees}))
+
+ .filter(o=>o.total<=max).sort((a,b)=>a.total-b.total);
+
+ const box=document.getElementById('results');
+
+ box.innerHTML='<p class="small">Demo results for '+size+'. Sample listings only; fitment is not verified.</p>';
+
+ if(!list.length){box.innerHTML+='<div class="card">No sample offers match that budget. Try increasing it.</div>';return;}
+
+ list.forEach((o,i)=>{
+
+ box.innerHTML+=`<div class="card">
+
+ <span class="pill">${i===0?'LOWEST TOTAL':'COMPARISON'}</span>
+
+ <h3>${o.brand}</h3><div class="small">${o.shop}</div>
+
+ <p class="price">$${o.total.toFixed(2)}</p>
+
+ <div class="small">Set of 4: $${(o.tire*4).toFixed(2)}<br>
+
+ Installation: $${o.install.toFixed(2)}<br>
+
+ Shipping: $${o.ship.toFixed(2)}<br>
+
+ Fees: $${o.fees.toFixed(2)}</div>
+
+ <button onclick="alert('Live retailer checkout is not connected in this prototype.')">View Deal</button>
+
+ </div>`;
+
+ });
+
+}
+
+function saveAccount(){
+
+ localStorage.setItem('tsName',document.getElementById('name').value);
+
+ localStorage.setItem('tsEmail',document.getElementById('email').value);
+
+ document.getElementById('accountstatus').textContent='Demo profile saved on this device.';
+
+}
+
+window.addEventListener('load',()=>{
+
+ const v=localStorage.getItem('tsVehicle');
+
+ const s=localStorage.getItem('tsSize');
+
+ if(v){document.getElementById('vehicle').textContent=v+' — '+s;
+
+ document.getElementById('saved').textContent='Vehicle loaded from this device.';
+
+ document.getElementById('searchsize').value=s;}
+
+ document.getElementById('name').value=localStorage.getItem('tsName')||'';
+
+ document.getElementById('email').value=localStorage.getItem('tsEmail')||'';
+
+});
+
+</script>
+
+</body>
+
+</html>
